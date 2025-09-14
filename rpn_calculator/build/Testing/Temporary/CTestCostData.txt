@@ -1,0 +1,5 @@
+test_addition 1 0.00493754
+test_power 1 0.005644
+test_division 1 0.00487946
+test_complex 1 0.00495015
+---
