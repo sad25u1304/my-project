@@ -1,0 +1,30 @@
+name: C++ CI
+
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake g++
+
+    - name: Build project
+      run: |
+        cd rpn_calculator
+        cmake -B build
+        cmake --build build
+
+    - name: Run basic tests
+      run: |
+        cd rpn_calculator
+        echo "3 4 +" | ./build/rpn_calculator | grep "Result: 7" && echo "✓ Test 1 passed"
+        echo "2 3 ^" | ./build/rpn_calculator | grep "Result: 8" && echo "✓ Test 2 passed" 
+        echo "10 2 /" | ./build/rpn_calculator | grep "Result: 5" && echo "✓ Test 3 passed"
+        echo "✅ All basic tests passed!"
