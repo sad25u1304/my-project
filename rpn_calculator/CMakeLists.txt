@@ -3,3 +3,5 @@ project(RPNCalculator)
 
 include_directories(include)
 add_executable(rpn_calculator src/main.cpp src/rpn.cpp)
+enable_testing()
+add_subdirectory(tests)
