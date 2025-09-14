@@ -8,7 +8,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Clean CMake cache
+    - name: Clean any existing build
       run: |
         cd rpn_calculator
         rm -rf build/ CMakeCache.txt CMakeFiles/ 2>/dev/null || true
@@ -16,16 +16,19 @@ jobs:
     - name: Install dependencies
       run: sudo apt-get update && sudo apt-get install -y cmake g++
       
-    - name: Build
+    - name: Configure with CMake
       run: |
         cd rpn_calculator
-        cmake -B build
-        cmake --build build
-        echo "✅ Build successful!"
+        cmake -B build -S .
         
-    - name: Simple test
+    - name: Build project
       run: |
         cd rpn_calculator
-        echo "2 3 ^" | ./build/rpn_calculator
-        echo "3 4 +" | ./build/rpn_calculator
-        echo "✅ Tests passed!"
+        cmake --build build
+        
+    - name: Run simple tests
+      run: |
+        cd rpn_calculator
+        echo "2 3 ^" | ./build/rpn_calculator | grep "Result: 8" && echo "✓ Power test passed"
+        echo "3 4 +" | ./build/rpn_calculator | grep "Result: 7" && echo "✓ Addition test passed"
+        echo "✅ All tests passed!"
